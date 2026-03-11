@@ -1,95 +1,1271 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Jericho Faderon</title>
-<link rel="stylesheet" href="style.css">
-<link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;700&display=swap" rel="stylesheet">
-</head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Your Name | Software Developer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Calibre:wght@400;500;600&family=SF+Mono&family=Fira+Code:wght@300;400;500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    /* =============================================
+       CSS VARIABLES — Edit colors here
+    ============================================= */
+    :root {
+      --navy:           #0a192f;
+      --light-navy:     #112240;
+      --lightest-navy:  #233554;
+      --slate:          #8892b0;
+      --light-slate:    #a8b2d1;
+      --lightest-slate: #ccd6f6;
+      --white:          #e6f1ff;
+      --green:          #64ffda;
+      --green-tint:     rgba(100, 255, 218, 0.1);
+      --font-sans:      'Inter', 'Calibre', sans-serif;
+      --font-mono:      'Fira Code', 'SF Mono', monospace;
+      --transition:     all 0.25s cubic-bezier(0.645, 0.045, 0.355, 1);
+      --nav-height:     70px;
+      --border-radius:  4px;
+    }
 
+    /* =============================================
+       RESET & BASE
+    ============================================= */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background-color: var(--navy);
+      color: var(--slate);
+      font-family: var(--font-sans);
+      font-size: 18px;
+      line-height: 1.3;
+      overflow-x: hidden;
+    }
+
+    a {
+      color: var(--green);
+      text-decoration: none;
+      transition: var(--transition);
+    }
+    a:hover { color: var(--green); opacity: 0.8; }
+
+    ul { list-style: none; }
+
+    /* =============================================
+       SCROLLBAR
+    ============================================= */
+    ::-webkit-scrollbar { width: 8px; }
+    ::-webkit-scrollbar-track { background: var(--navy); }
+    ::-webkit-scrollbar-thumb { background: var(--lightest-navy); border-radius: 10px; }
+
+    /* =============================================
+       SELECTION
+    ============================================= */
+    ::selection { background-color: var(--lightest-navy); color: var(--lightest-slate); }
+
+    /* =============================================
+       LAYOUT
+    ============================================= */
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 0 150px;
+    }
+
+    @media (max-width: 1080px) { .container { padding: 0 100px; } }
+    @media (max-width: 768px)  { .container { padding: 0 50px; } }
+    @media (max-width: 480px)  { .container { padding: 0 25px; } }
+
+    /* =============================================
+       NAVIGATION
+    ============================================= */
+    #navbar {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      height: var(--nav-height);
+      background: rgba(10, 25, 47, 0.85);
+      backdrop-filter: blur(10px);
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 50px;
+      transition: var(--transition);
+      border-bottom: 1px solid transparent;
+    }
+
+    #navbar.scrolled {
+      box-shadow: 0 10px 30px -10px rgba(2,12,27,0.7);
+      border-bottom: 1px solid var(--lightest-navy);
+    }
+
+    .nav-logo a {
+      color: var(--green);
+      font-family: var(--font-mono);
+      font-size: 22px;
+      font-weight: 600;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .nav-links li a {
+      color: var(--lightest-slate);
+      font-family: var(--font-mono);
+      font-size: 13px;
+      padding: 10px 15px;
+      transition: var(--transition);
+    }
+
+    .nav-links li a:hover { color: var(--green); }
+
+    .nav-links li a span {
+      color: var(--green);
+      margin-right: 5px;
+    }
+
+    .nav-resume-btn {
+      color: var(--green) !important;
+      border: 1px solid var(--green);
+      border-radius: var(--border-radius);
+      padding: 10px 16px !important;
+      margin-left: 15px;
+      transition: var(--transition) !important;
+    }
+    .nav-resume-btn:hover {
+      background: var(--green-tint) !important;
+      opacity: 1 !important;
+    }
+
+    /* Mobile nav toggle */
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      z-index: 1100;
+    }
+    .hamburger span {
+      width: 28px;
+      height: 2px;
+      background: var(--green);
+      transition: var(--transition);
+      display: block;
+    }
+    .hamburger.open span:nth-child(1) { transform: rotate(45deg) translate(5px, 6px); }
+    .hamburger.open span:nth-child(2) { opacity: 0; }
+    .hamburger.open span:nth-child(3) { transform: rotate(-45deg) translate(5px, -6px); }
+
+    .mobile-nav {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: var(--light-navy);
+      z-index: 1050;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 30px;
+    }
+    .mobile-nav.open { display: flex; }
+    .mobile-nav li a {
+      font-family: var(--font-mono);
+      font-size: 14px;
+      color: var(--lightest-slate);
+    }
+    .mobile-nav li a span { color: var(--green); margin-right: 5px; display: block; font-size: 12px; }
+    .mobile-nav li a:hover { color: var(--green); }
+
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .hamburger { display: flex; }
+    }
+
+    /* =============================================
+       SOCIAL SIDEBAR (left)
+    ============================================= */
+    .social-sidebar {
+      position: fixed;
+      bottom: 0;
+      left: 40px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+      z-index: 10;
+    }
+
+    .social-sidebar::after {
+      content: '';
+      display: block;
+      width: 1px;
+      height: 90px;
+      background: var(--light-slate);
+      margin-top: 10px;
+    }
+
+    .social-sidebar a {
+      color: var(--light-slate);
+      transition: var(--transition);
+    }
+    .social-sidebar a:hover {
+      color: var(--green);
+      transform: translateY(-3px);
+      opacity: 1;
+    }
+
+    .social-sidebar svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+    /* =============================================
+       EMAIL SIDEBAR (right)
+    ============================================= */
+    .email-sidebar {
+      position: fixed;
+      bottom: 0;
+      right: 40px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+      z-index: 10;
+    }
+
+    .email-sidebar::after {
+      content: '';
+      display: block;
+      width: 1px;
+      height: 90px;
+      background: var(--light-slate);
+      margin-top: 10px;
+    }
+
+    .email-sidebar a {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      letter-spacing: 0.1em;
+      writing-mode: vertical-rl;
+      color: var(--light-slate);
+      transition: var(--transition);
+    }
+    .email-sidebar a:hover {
+      color: var(--green);
+      transform: translateY(-3px);
+      opacity: 1;
+    }
+
+    @media (max-width: 1080px) { .social-sidebar, .email-sidebar { display: none; } }
+
+    /* =============================================
+       SECTIONS
+    ============================================= */
+    section {
+      padding: 100px 0;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+    }
+
+    .section-inner {
+      width: 100%;
+    }
+
+    .section-heading {
+      display: flex;
+      align-items: center;
+      margin-bottom: 40px;
+      font-size: clamp(22px, 5vw, 28px);
+      font-weight: 600;
+      color: var(--lightest-slate);
+      white-space: nowrap;
+    }
+
+    .section-heading span {
+      color: var(--green);
+      font-family: var(--font-mono);
+      font-size: clamp(14px, 3vw, 16px);
+      font-weight: 400;
+      margin-right: 10px;
+    }
+
+    .section-heading::after {
+      content: '';
+      display: block;
+      position: relative;
+      width: 300px;
+      height: 1px;
+      background: var(--lightest-navy);
+      margin-left: 20px;
+    }
+
+    /* =============================================
+       HERO SECTION
+    ============================================= */
+    #hero {
+      min-height: 100vh;
+      flex-direction: column;
+      justify-content: center;
+      padding-top: var(--nav-height);
+    }
+
+    .hero-inner {
+      max-width: 900px;
+    }
+
+    .hero-intro {
+      font-family: var(--font-mono);
+      color: var(--green);
+      font-size: clamp(14px, 3vw, 16px);
+      margin-bottom: 20px;
+      animation: fadeInUp 0.5s ease forwards;
+      opacity: 0;
+      animation-delay: 0.1s;
+    }
+
+    .hero-name {
+      font-size: clamp(40px, 8vw, 80px);
+      font-weight: 600;
+      color: var(--lightest-slate);
+      line-height: 1.1;
+      margin-bottom: 10px;
+      animation: fadeInUp 0.5s ease forwards;
+      opacity: 0;
+      animation-delay: 0.2s;
+    }
+
+    .hero-tagline {
+      font-size: clamp(30px, 6vw, 65px);
+      font-weight: 600;
+      color: var(--slate);
+      line-height: 1.1;
+      margin-bottom: 30px;
+      animation: fadeInUp 0.5s ease forwards;
+      opacity: 0;
+      animation-delay: 0.3s;
+    }
+
+    .hero-description {
+      max-width: 540px;
+      font-size: 17px;
+      color: var(--slate);
+      margin-bottom: 50px;
+      animation: fadeInUp 0.5s ease forwards;
+      opacity: 0;
+      animation-delay: 0.4s;
+    }
+
+    .hero-description a { color: var(--green); }
+
+    .hero-cta {
+      animation: fadeInUp 0.5s ease forwards;
+      opacity: 0;
+      animation-delay: 0.5s;
+    }
+
+    .btn {
+      display: inline-block;
+      color: var(--green);
+      border: 1px solid var(--green);
+      border-radius: var(--border-radius);
+      padding: 18px 28px;
+      font-family: var(--font-mono);
+      font-size: 14px;
+      line-height: 1;
+      text-decoration: none;
+      cursor: pointer;
+      transition: var(--transition);
+      background: transparent;
+    }
+    .btn:hover {
+      background: var(--green-tint);
+      opacity: 1;
+    }
+
+    /* =============================================
+       ABOUT SECTION
+    ============================================= */
+    .about-inner {
+      display: grid;
+      grid-template-columns: 3fr 2fr;
+      gap: 50px;
+      align-items: center;
+    }
+
+    @media (max-width: 768px) { .about-inner { grid-template-columns: 1fr; } }
+
+    .about-text p {
+      margin-bottom: 15px;
+      font-size: 17px;
+      line-height: 1.7;
+    }
+
+    .about-text p a { color: var(--green); }
+
+    .skills-list {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(140px, 200px));
+      gap: 5px 10px;
+      margin-top: 20px;
+    }
+
+    .skills-list li {
+      font-family: var(--font-mono);
+      font-size: 13px;
+      color: var(--slate);
+      padding: 3px 0;
+    }
+
+    .skills-list li::before {
+      content: '▹';
+      color: var(--green);
+      margin-right: 10px;
+    }
+
+    .about-image {
+      position: relative;
+      max-width: 300px;
+      justify-self: center;
+    }
+
+    .about-image-wrapper {
+      position: relative;
+      border-radius: var(--border-radius);
+    }
+
+    .about-image-wrapper::after {
+      content: '';
+      display: block;
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      border: 2px solid var(--green);
+      border-radius: var(--border-radius);
+      top: 15px;
+      left: 15px;
+      z-index: -1;
+      transition: var(--transition);
+    }
+
+    .about-image-wrapper:hover::after {
+      top: 10px;
+      left: 10px;
+    }
+
+    .about-image img {
+      width: 100%;
+      border-radius: var(--border-radius);
+      filter: grayscale(30%) contrast(1);
+      mix-blend-mode: normal;
+      transition: var(--transition);
+      position: relative;
+      z-index: 1;
+    }
+
+    .about-image img:hover {
+      filter: none;
+    }
+
+    /* Photo placeholder */
+    .photo-placeholder {
+      width: 100%;
+      aspect-ratio: 1;
+      background: var(--lightest-navy);
+      border-radius: var(--border-radius);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      color: var(--slate);
+      font-family: var(--font-mono);
+      font-size: 13px;
+      position: relative;
+      z-index: 1;
+    }
+    .photo-placeholder svg { width: 48px; height: 48px; stroke: var(--green); fill: none; stroke-width: 1.5; }
+
+    /* =============================================
+       EXPERIENCE SECTION
+    ============================================= */
+    .exp-tabs {
+      display: flex;
+      gap: 0;
+    }
+
+    @media (max-width: 600px) { .exp-tabs { flex-direction: column; } }
+
+    .tab-list {
+      position: relative;
+      min-width: 140px;
+    }
+
+    .tab-list::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 2px;
+      height: 100%;
+      background: var(--lightest-navy);
+    }
+
+    .tab-indicator {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 2px;
+      height: 42px;
+      background: var(--green);
+      transition: transform 0.25s ease;
+      transform: translateY(0px);
+    }
+
+    @media (max-width: 600px) {
+      .tab-list { min-width: 100%; display: flex; }
+      .tab-list::before { width: 100%; height: 2px; top: auto; bottom: 0; }
+      .tab-indicator { width: 100%; height: 2px; top: auto; bottom: 0; transform: translateX(0px); }
+    }
+
+    .tab-btn {
+      display: flex;
+      align-items: center;
+      width: 100%;
+      height: 42px;
+      padding: 0 20px;
+      border: none;
+      border-left: none;
+      background: transparent;
+      color: var(--slate);
+      font-family: var(--font-mono);
+      font-size: 13px;
+      cursor: pointer;
+      transition: var(--transition);
+      text-align: left;
+      white-space: nowrap;
+    }
+    .tab-btn:hover, .tab-btn.active { color: var(--green); background: var(--green-tint); }
+
+    @media (max-width: 600px) {
+      .tab-btn { border-left: none; border-bottom: none; padding: 0 15px; }
+    }
+
+    .tab-panel { display: none; padding-left: 30px; }
+    .tab-panel.active { display: block; }
+
+    .tab-panel h3 {
+      font-size: 22px;
+      font-weight: 500;
+      color: var(--lightest-slate);
+      margin-bottom: 5px;
+    }
+    .tab-panel h3 span { color: var(--green); }
+
+    .tab-range {
+      font-family: var(--font-mono);
+      font-size: 13px;
+      color: var(--slate);
+      margin-bottom: 25px;
+    }
+
+    .tab-panel ul li {
+      position: relative;
+      padding-left: 30px;
+      margin-bottom: 10px;
+      color: var(--slate);
+      font-size: 16px;
+      line-height: 1.6;
+    }
+    .tab-panel ul li::before {
+      content: '▹';
+      position: absolute;
+      left: 0;
+      color: var(--green);
+    }
+
+    /* =============================================
+       PROJECTS SECTION
+    ============================================= */
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 15px;
+    }
+
+    .project-card {
+      background: var(--light-navy);
+      border-radius: var(--border-radius);
+      padding: 30px;
+      display: flex;
+      flex-direction: column;
+      transition: var(--transition);
+      cursor: default;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .project-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 20px 30px -15px rgba(2,12,27,0.7);
+    }
+
+    .project-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 35px;
+    }
+
+    .project-folder svg {
+      width: 40px;
+      height: 40px;
+      stroke: var(--green);
+      fill: none;
+      stroke-width: 1.5;
+    }
+
+    .project-links {
+      display: flex;
+      gap: 15px;
+    }
+    .project-links a { color: var(--light-slate); transition: var(--transition); }
+    .project-links a:hover { color: var(--green); opacity: 1; }
+    .project-links svg { width: 20px; height: 20px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+    .project-name {
+      font-size: 20px;
+      font-weight: 600;
+      color: var(--lightest-slate);
+      margin-bottom: 10px;
+      transition: var(--transition);
+    }
+    .project-card:hover .project-name { color: var(--green); }
+
+    .project-desc {
+      font-size: 14px;
+      color: var(--slate);
+      line-height: 1.7;
+      flex: 1;
+    }
+
+    .project-tech {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 20px;
+    }
+    .project-tech span {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--slate);
+    }
+
+    /* Featured project */
+    .featured-projects { margin-bottom: 70px; }
+
+    .featured-project {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      align-items: center;
+      margin-bottom: 100px;
+    }
+
+    .feat-image {
+      grid-column: 1 / 8;
+      grid-row: 1;
+      border-radius: var(--border-radius);
+      overflow: hidden;
+      background: var(--light-navy);
+    }
+
+    .feat-image-placeholder {
+      width: 100%;
+      height: 300px;
+      background: linear-gradient(135deg, var(--light-navy), var(--lightest-navy));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--slate);
+      font-family: var(--font-mono);
+      font-size: 13px;
+    }
+
+    .feat-content {
+      position: relative;
+      grid-column: 7 / -1;
+      grid-row: 1;
+      text-align: right;
+      z-index: 1;
+    }
+
+    .featured-project.alt .feat-image { grid-column: 6 / -1; }
+    .featured-project.alt .feat-content { grid-column: 1 / 7; text-align: left; }
+
+    .feat-overline {
+      font-family: var(--font-mono);
+      font-size: 13px;
+      color: var(--green);
+      margin-bottom: 10px;
+    }
+
+    .feat-title {
+      font-size: 28px;
+      font-weight: 600;
+      color: var(--lightest-slate);
+      margin-bottom: 25px;
+    }
+
+    .feat-desc {
+      background: var(--light-navy);
+      padding: 25px;
+      border-radius: var(--border-radius);
+      font-size: 15px;
+      color: var(--light-slate);
+      line-height: 1.7;
+      margin-bottom: 25px;
+      box-shadow: 0 10px 30px -15px rgba(2,12,27,0.7);
+    }
+
+    .feat-tech {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      justify-content: flex-end;
+      font-family: var(--font-mono);
+      font-size: 13px;
+      color: var(--light-slate);
+      margin-bottom: 15px;
+    }
+
+    .featured-project.alt .feat-tech { justify-content: flex-start; }
+
+    .feat-links {
+      display: flex;
+      gap: 15px;
+      justify-content: flex-end;
+    }
+    .featured-project.alt .feat-links { justify-content: flex-start; }
+    .feat-links a { color: var(--light-slate); transition: var(--transition); }
+    .feat-links a:hover { color: var(--green); opacity: 1; }
+    .feat-links svg { width: 22px; height: 22px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+    @media (max-width: 768px) {
+      .featured-project, .featured-project.alt {
+        display: block;
+      }
+      .feat-content { text-align: left; }
+      .feat-tech, .feat-links { justify-content: flex-start; }
+    }
+
+    /* =============================================
+       CONTACT SECTION
+    ============================================= */
+    #contact {
+      flex-direction: column;
+      text-align: center;
+    }
+
+    .contact-overline {
+      font-family: var(--font-mono);
+      font-size: 16px;
+      color: var(--green);
+      margin-bottom: 20px;
+    }
+    .contact-overline span { margin-right: 10px; }
+
+    .contact-title {
+      font-size: clamp(40px, 7vw, 60px);
+      font-weight: 600;
+      color: var(--lightest-slate);
+      margin-bottom: 20px;
+    }
+
+    .contact-text {
+      max-width: 600px;
+      margin: 0 auto 50px;
+      font-size: 16px;
+      line-height: 1.7;
+      color: var(--slate);
+    }
+
+    /* =============================================
+       FOOTER
+    ============================================= */
+    footer {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 15px;
+      font-family: var(--font-mono);
+      font-size: 13px;
+      color: var(--slate);
+      text-align: center;
+    }
+
+    footer a { color: var(--green); }
+
+    /* =============================================
+       ANIMATIONS
+    ============================================= */
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .fade-in {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    .fade-in.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+  </style>
+</head>
 <body>
 
-<header>
-  <nav>
-    <h1 class="logo">Jericho</h1>
+  <!-- =============================================
+       NAVIGATION
+  ============================================= -->
+  <nav id="navbar">
+    <div class="nav-logo">
+      <!-- ✏️ CHANGE: Update initials below -->
+      <a href="#">YN</a>
+    </div>
     <ul class="nav-links">
-      <li><a href="#about">About</a></li>
-      <li><a href="#skills">Tech</a></li>
-      <li><a href="#projects">Projects</a></li>
-      <li><a href="#contact">Contact</a></li>
+      <li><a href="#about"><span>01.</span>About</a></li>
+      <li><a href="#experience"><span>02.</span>Experience</a></li>
+      <li><a href="#projects"><span>03.</span>Projects</a></li>
+      <li><a href="#contact"><span>04.</span>Contact</a></li>
+      <!-- ✏️ CHANGE: Link to your actual resume PDF -->
+      <li><a href="resume.pdf" class="nav-resume-btn" target="_blank" rel="noopener">Resume</a></li>
     </ul>
-    <!-- Top-right social icons -->
-    <div class="social-icons">
-      <a href="https://github.com/jerichofaderon" target="_blank" aria-label="GitHub">
-        <img src="icons/github.svg" alt="GitHub" />
-      </a>
-      <a href="https://www.linkedin.com/in/jerichofaderon/" target="_blank" aria-label="LinkedIn">
-        <img src="icons/linkedin.svg" alt="LinkedIn" />
-      </a>
+    <div class="hamburger" onclick="toggleMobileNav()" id="hamburger">
+      <span></span><span></span><span></span>
     </div>
   </nav>
-</header>
 
-<section class="hero">
-  <h2>Hi, my name is</h2>
-  <h1>Jericho Faderon</h1>
-  <p class="hero-desc">I build <span class="typing" id="typing"></span></p>
-  <button onclick="scrollToSection('projects')">View My Work</button>
-</section>
+  <!-- Mobile Nav -->
+  <ul class="mobile-nav" id="mobileNav">
+    <li><a href="#about" onclick="toggleMobileNav()"><span>01.</span>About</a></li>
+    <li><a href="#experience" onclick="toggleMobileNav()"><span>02.</span>Experience</a></li>
+    <li><a href="#projects" onclick="toggleMobileNav()"><span>03.</span>Projects</a></li>
+    <li><a href="#contact" onclick="toggleMobileNav()"><span>04.</span>Contact</a></li>
+    <li><a href="resume.pdf" target="_blank">Resume</a></li>
+  </ul>
 
-<section id="about" class="section">
-  <h2>About Me</h2>
-  <p>I’m a software developer passionate about building fast, accessible, and modern web applications. I enjoy working with JavaScript and exploring new technologies to create interactive experiences.</p>
-</section>
-
-<section id="skills" class="section">
-  <h2>Tech Stack</h2>
-  <div class="skills">
-    <span>HTML</span>
-    <span>CSS</span>
-    <span>JavaScript</span>
-    <span>React</span>
-    <span>Git</span>
-    <span>GitHub</span>
+  <!-- =============================================
+       LEFT SOCIAL SIDEBAR
+  ============================================= -->
+  <div class="social-sidebar">
+    <!-- ✏️ CHANGE: Add your own GitHub / LinkedIn / etc. URLs -->
+    <a href="https://github.com/" target="_blank" rel="noopener" aria-label="GitHub">
+      <svg viewBox="0 0 24 24"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+    </a>
+    <a href="https://linkedin.com/in/" target="_blank" rel="noopener" aria-label="LinkedIn">
+      <svg viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+    </a>
+    <a href="https://twitter.com/" target="_blank" rel="noopener" aria-label="Twitter">
+      <svg viewBox="0 0 24 24"><path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"/></svg>
+    </a>
+    <a href="https://instagram.com/" target="_blank" rel="noopener" aria-label="Instagram">
+      <svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+    </a>
   </div>
-</section>
 
-<section id="projects" class="section">
-  <h2>Projects</h2>
-  <div class="projects">
-    <div class="card">
-      <h3>Portfolio Website</h3>
-      <p>A responsive personal portfolio built with HTML, CSS, and JavaScript.</p>
-      <a href="#">View Project</a>
-    </div>
-    <div class="card">
-      <h3>JavaScript App</h3>
-      <p>Interactive web application demonstrating modern JavaScript functionality.</p>
-      <a href="#">View Project</a>
-    </div>
-    <div class="card">
-      <h3>Creative Coding</h3>
-      <p>An experimental project exploring visual effects and interactive design.</p>
-      <a href="#">View Project</a>
-    </div>
+  <!-- =============================================
+       RIGHT EMAIL SIDEBAR
+  ============================================= -->
+  <div class="email-sidebar">
+    <!-- ✏️ CHANGE: Your email address -->
+    <a href="mailto:yourname@email.com">yourname@email.com</a>
   </div>
-</section>
 
-<section id="contact" class="section">
-  <h2>Contact</h2>
-  <p>Email: hello@email.com</p>
-  <div class="socials">
-    <a href="https://github.com/jerichofaderon">GitHub</a>
-    <a href="https://www.linkedin.com/in/jerichofaderon/">LinkedIn</a>
-  </div>
-</section>
+  <!-- =============================================
+       HERO SECTION
+  ============================================= -->
+  <section id="hero">
+    <div class="container">
+      <div class="hero-inner">
+        <!-- ✏️ CHANGE: All text below -->
+        <p class="hero-intro">Hi, my name is</p>
+        <h1 class="hero-name">Your Name.</h1>
+        <h2 class="hero-tagline">I build things for the web.</h2>
+        <p class="hero-description">
+          I'm a software developer specializing in building exceptional digital experiences.
+          Currently, I'm focused on building accessible, human-centered products at
+          <a href="#" target="_blank" rel="noopener">Your Company</a>.
+        </p>
+        <div class="hero-cta">
+          <a class="btn" href="#projects">Check out my work!</a>
+        </div>
+      </div>
+    </div>
+  </section>
 
-<footer>
-  <p>© 2026 Jericho Faderon</p>
-</footer>
+  <!-- =============================================
+       ABOUT SECTION
+  ============================================= -->
+  <section id="about">
+    <div class="container">
+      <div class="section-inner fade-in">
+        <h2 class="section-heading"><span>01.</span> About Me</h2>
+        <div class="about-inner">
+          <div class="about-text">
+            <!-- ✏️ CHANGE: Your bio paragraphs -->
+            <p>
+              Hello! My name is <strong style="color:var(--lightest-slate)">Your Name</strong> and I enjoy creating things that live on the internet.
+              My interest in web development started back in 2015 when I decided to try editing custom Tumblr themes —
+              turns out hacking together a custom reblog button taught me a lot about HTML &amp; CSS!
+            </p>
+            <p>
+              Fast-forward to today, and I've had the privilege of working at
+              <a href="#">a start-up</a>,
+              <a href="#">a large corporation</a>,
+              and <a href="#">a student-led design studio</a>.
+              My main focus these days is building accessible, inclusive products and digital experiences
+              for a variety of clients.
+            </p>
+            <p>
+              When I'm not at the computer, I'm usually rock climbing, reading, hanging out with my cat,
+              or running around my favorite
+              <a href="#">coffee shop</a>.
+            </p>
+            <p>Here are a few technologies I've been working with recently:</p>
+            <!-- ✏️ CHANGE: Your skills -->
+            <ul class="skills-list">
+              <li>JavaScript (ES6+)</li>
+              <li>TypeScript</li>
+              <li>React</li>
+              <li>Node.js</li>
+              <li>Python</li>
+              <li>SQL / PostgreSQL</li>
+            </ul>
+          </div>
+          <div class="about-image">
+            <div class="about-image-wrapper">
+              <!--
+                ✏️ CHANGE: Replace this placeholder with an actual <img> tag:
+                <img src="your-photo.jpg" alt="Your Name" />
+              -->
+              <div class="photo-placeholder">
+                <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.58-7 8-7s8 3 8 7"/></svg>
+                Add your photo here
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 
-<script src="script.js"></script>
+  <!-- =============================================
+       EXPERIENCE SECTION
+  ============================================= -->
+  <section id="experience">
+    <div class="container">
+      <div class="section-inner fade-in">
+        <h2 class="section-heading"><span>02.</span> Where I've Worked</h2>
+        <div class="exp-tabs">
+          <div class="tab-list" id="tabList">
+            <div class="tab-indicator" id="tabIndicator"></div>
+            <!-- ✏️ CHANGE: Add/remove company tab buttons -->
+            <button class="tab-btn active" data-tab="0" onclick="switchTab(0)">Company A</button>
+            <button class="tab-btn" data-tab="1" onclick="switchTab(1)">Company B</button>
+            <button class="tab-btn" data-tab="2" onclick="switchTab(2)">Company C</button>
+          </div>
+
+          <!-- ✏️ CHANGE: Fill in each job panel -->
+          <div class="tab-panel active" id="panel-0">
+            <h3>Software Engineer <span>@ Company A</span></h3>
+            <p class="tab-range">Jan 2023 – Present</p>
+            <ul>
+              <li>Developed and maintained features for a customer-facing platform serving 50,000+ users.</li>
+              <li>Improved site performance by 40% through lazy loading and code-splitting strategies.</li>
+              <li>Collaborated with designers and product managers to ship a full redesign of the dashboard.</li>
+              <li>Mentored two junior engineers and conducted code reviews to ensure best practices.</li>
+            </ul>
+          </div>
+
+          <div class="tab-panel" id="panel-1">
+            <h3>Front-End Developer <span>@ Company B</span></h3>
+            <p class="tab-range">May 2021 – Dec 2022</p>
+            <ul>
+              <li>Built responsive UIs from Figma designs using React and TypeScript.</li>
+              <li>Integrated third-party APIs including Stripe, Twilio, and SendGrid.</li>
+              <li>Wrote unit and integration tests with Jest, achieving 85% code coverage.</li>
+            </ul>
+          </div>
+
+          <div class="tab-panel" id="panel-2">
+            <h3>Software Engineering Intern <span>@ Company C</span></h3>
+            <p class="tab-range">Sep 2020 – Apr 2021</p>
+            <ul>
+              <li>Implemented a real-time notifications system using WebSockets and Redis pub/sub.</li>
+              <li>Reduced database query time by 60% by adding indexes and refactoring ORM queries.</li>
+              <li>Participated in daily standups, sprint planning, and retrospectives in an Agile environment.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =============================================
+       PROJECTS SECTION
+  ============================================= -->
+  <section id="projects">
+    <div class="container">
+      <div class="section-inner fade-in">
+        <h2 class="section-heading"><span>03.</span> Some Things I've Built</h2>
+
+        <!-- FEATURED PROJECTS -->
+        <div class="featured-projects">
+
+          <!-- ✏️ CHANGE: Featured Project 1 -->
+          <div class="featured-project">
+            <div class="feat-image">
+              <div class="feat-image-placeholder">Project Screenshot</div>
+            </div>
+            <div class="feat-content">
+              <p class="feat-overline">Featured Project</p>
+              <h3 class="feat-title">Project Name One</h3>
+              <div class="feat-desc">
+                A web application that does something really cool and impressive. Built to solve a specific
+                problem I was passionate about, this project involved a lot of interesting technical challenges.
+              </div>
+              <ul class="feat-tech">
+                <li>React</li><li>Node.js</li><li>MongoDB</li><li>AWS</li>
+              </ul>
+              <div class="feat-links">
+                <a href="#" target="_blank" rel="noopener" aria-label="GitHub">
+                  <svg viewBox="0 0 24 24"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+                </a>
+                <a href="#" target="_blank" rel="noopener" aria-label="External Link">
+                  <svg viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <!-- ✏️ CHANGE: Featured Project 2 (alternate layout) -->
+          <div class="featured-project alt">
+            <div class="feat-image">
+              <div class="feat-image-placeholder">Project Screenshot</div>
+            </div>
+            <div class="feat-content">
+              <p class="feat-overline">Featured Project</p>
+              <h3 class="feat-title">Project Name Two</h3>
+              <div class="feat-desc">
+                Another impressive project with a different layout. This one demonstrates breadth across a
+                different tech stack and tackles an entirely distinct problem domain.
+              </div>
+              <ul class="feat-tech">
+                <li>Python</li><li>Flask</li><li>PostgreSQL</li><li>Docker</li>
+              </ul>
+              <div class="feat-links">
+                <a href="#" target="_blank" rel="noopener" aria-label="GitHub">
+                  <svg viewBox="0 0 24 24"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+                </a>
+                <a href="#" target="_blank" rel="noopener" aria-label="External Link">
+                  <svg viewBox="0 0 24 54"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                </a>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- OTHER NOTEWORTHY PROJECTS GRID -->
+        <h3 style="text-align:center; font-family:var(--font-mono); font-size:16px; color:var(--lightest-slate); margin-bottom:40px; font-weight:400;">
+          Other Noteworthy Projects
+        </h3>
+        <div class="projects-grid">
+
+          <!-- ✏️ CHANGE: Add/remove project cards below -->
+
+          <div class="project-card">
+            <div class="project-top">
+              <div class="project-folder">
+                <svg viewBox="0 0 24 24"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+              </div>
+              <div class="project-links">
+                <a href="#" target="_blank"><svg viewBox="0 0 24 24"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg></a>
+                <a href="#" target="_blank"><svg viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></a>
+              </div>
+            </div>
+            <h3 class="project-name">Maze Solver AI</h3>
+            <p class="project-desc">A self-learning AI that traverses a maze using the genetic algorithm, visualized in real-time.</p>
+            <ul class="project-tech">
+              <span>Python</span><span>NumPy</span><span>Pygame</span>
+            </ul>
+          </div>
+
+          <div class="project-card">
+            <div class="project-top">
+              <div class="project-folder">
+                <svg viewBox="0 0 24 24"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+              </div>
+              <div class="project-links">
+                <a href="#" target="_blank"><svg viewBox="0 0 24 24"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg></a>
+              </div>
+            </div>
+            <h3 class="project-name">Homework Manager</h3>
+            <p class="project-desc">A homework management system with a Flask back-end and Vue front-end, built for a school district.</p>
+            <ul class="project-tech">
+              <span>Vue.js</span><span>Flask</span><span>SQLite</span>
+            </ul>
+          </div>
+
+          <div class="project-card">
+            <div class="project-top">
+              <div class="project-folder">
+                <svg viewBox="0 0 24 24"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+              </div>
+              <div class="project-links">
+                <a href="#" target="_blank"><svg viewBox="0 0 24 24"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg></a>
+                <a href="#" target="_blank"><svg viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></a>
+              </div>
+            </div>
+            <h3 class="project-name">Solar System Renderer</h3>
+            <p class="project-desc">An interactive 3D solar system simulation with realistic orbital mechanics built using Three.js.</p>
+            <ul class="project-tech">
+              <span>Three.js</span><span>JavaScript</span><span>WebGL</span>
+            </ul>
+          </div>
+
+          <div class="project-card">
+            <div class="project-top">
+              <div class="project-folder">
+                <svg viewBox="0 0 24 24"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+              </div>
+              <div class="project-links">
+                <a href="#" target="_blank"><svg viewBox="0 0 24 24"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg></a>
+              </div>
+            </div>
+            <h3 class="project-name">Board Game Suite</h3>
+            <p class="project-desc">An Android app with three board games (Sliding Tiles, Hangman, Tic Tac Toe) featuring multiplayer and autosave.</p>
+            <ul class="project-tech">
+              <span>Java</span><span>Android SDK</span><span>Firebase</span>
+            </ul>
+          </div>
+
+          <div class="project-card">
+            <div class="project-top">
+              <div class="project-folder">
+                <svg viewBox="0 0 24 24"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+              </div>
+              <div class="project-links">
+                <a href="#" target="_blank"><svg viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></a>
+              </div>
+            </div>
+            <h3 class="project-name">Portfolio Website</h3>
+            <p class="project-desc">This very website! A clean, accessible, and responsive portfolio built in vanilla HTML, CSS, and JS.</p>
+            <ul class="project-tech">
+              <span>HTML</span><span>CSS</span><span>JavaScript</span>
+            </ul>
+          </div>
+
+          <div class="project-card">
+            <div class="project-top">
+              <div class="project-folder">
+                <svg viewBox="0 0 24 24"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+              </div>
+              <div class="project-links">
+                <a href="#" target="_blank"><svg viewBox="0 0 24 24"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg></a>
+              </div>
+            </div>
+            <h3 class="project-name">CLI Dev Tool</h3>
+            <p class="project-desc">A command-line tool that automates repetitive project scaffolding tasks and enforces team conventions.</p>
+            <ul class="project-tech">
+              <span>Node.js</span><span>Shell</span><span>npm</span>
+            </ul>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =============================================
+       CONTACT SECTION
+  ============================================= -->
+  <section id="contact">
+    <div class="container">
+      <div class="section-inner fade-in" style="width:100%">
+        <p class="contact-overline"><span>04.</span>What's Next?</p>
+        <h2 class="contact-title">Get In Touch</h2>
+        <p class="contact-text">
+          Although I'm not currently looking for any new opportunities, my inbox is always open.
+          Whether you have a question or just want to say hi, I'll try my best to get back to you!
+        </p>
+        <!-- ✏️ CHANGE: Your email address -->
+        <a class="btn" href="mailto:yourname@email.com">Say Hello</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- =============================================
+       FOOTER
+  ============================================= -->
+  <footer>
+    <!-- ✏️ CHANGE: Your name and links -->
+    <p>Designed &amp; Built by <a href="#">Your Name</a></p>
+  </footer>
+
+  <!-- =============================================
+       JAVASCRIPT
+  ============================================= -->
+  <script>
+    // ── Navbar shadow on scroll ──────────────────
+    window.addEventListener('scroll', () => {
+      const nav = document.getElementById('navbar');
+      nav.classList.toggle('scrolled', window.scrollY > 10);
+    });
+
+    // ── Mobile nav toggle ────────────────────────
+    function toggleMobileNav() {
+      document.getElementById('mobileNav').classList.toggle('open');
+      document.getElementById('hamburger').classList.toggle('open');
+    }
+
+    // ── Experience tabs ──────────────────────────
+    function switchTab(index) {
+      // Deactivate all
+      document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+      document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+
+      // Activate selected
+      document.querySelector(`.tab-btn[data-tab="${index}"]`).classList.add('active');
+      document.getElementById(`panel-${index}`).classList.add('active');
+
+      // Move indicator
+      const indicator = document.getElementById('tabIndicator');
+      if (window.innerWidth > 600) {
+        indicator.style.transform = `translateY(${index * 42}px)`;
+      } else {
+        indicator.style.transform = `translateX(${index * 100}%)`;
+      }
+    }
+
+    // ── Fade-in on scroll ────────────────────────
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+  </script>
+
 </body>
 </html>
