@@ -11,10 +11,13 @@ button:hover{background:#52e0c4;}
 header{position:fixed;width:100%;top:0;background:#0a192f;padding:20px;z-index:1000;}
 nav{display:flex;justify-content:space-between;align-items:center;max-width:1200px;margin:auto;}
 nav .logo{color:#64ffda;font-size:22px;}
-nav ul{display:flex;gap:25px;list-style:none;}
-nav ul li a{color:#64ffda;font-weight:bold;}
-.github-link{background:#64ffda;color:#0a192f;padding:8px 14px;border-radius:6px;font-weight:bold;}
-.github-link:hover{background:#52e0c4;}
+.nav-links{display:flex;gap:25px;list-style:none;}
+.nav-links li a{color:#64ffda;font-weight:bold;}
+
+/* Top-right social icons */
+.social-icons{display:flex;gap:15px;}
+.social-icons a img{width:24px;height:24px;filter:invert(84%) sepia(6%) saturate(3023%) hue-rotate(166deg) brightness(102%) contrast(101%);transition:0.3s;}
+.social-icons a img:hover{filter:invert(42%) sepia(87%) saturate(4083%) hue-rotate(156deg) brightness(101%) contrast(101%);}
 
 /* Hero */
 .hero{height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;position:relative;overflow:hidden;}
@@ -22,8 +25,6 @@ nav ul li a{color:#64ffda;font-weight:bold;}
 .hero h1{font-size:60px;margin-bottom:15px;}
 .hero-desc{max-width:600px;margin-bottom:30px;opacity:0;animation:fadeIn 2s forwards 1s;}
 @keyframes fadeIn{from{opacity:0;} to{opacity:1;}}
-
-/* Typing animation */
 .typing{border-right:2px solid #64ffda;white-space:nowrap;overflow:hidden;display:inline-block;animation:blink 0.7s infinite;}
 @keyframes blink{0%,100%{border-color:#64ffda;}50%{border-color:transparent;}}
 
@@ -49,5 +50,5 @@ footer{text-align:center;padding:40px;margin-top:40px;background:#020c1b;}
 /* Responsive */
 @media(max-width:768px){
 .hero h1{font-size:42px;}
-nav ul{display:none;}
+.nav-links{display:none;}
 }
